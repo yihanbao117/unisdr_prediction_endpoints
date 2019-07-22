@@ -1,7 +1,7 @@
-# UNISDR Text Classification Flask API - with JWT Authentication 
+# UNISDR Text Classification Flask API
 
 ## Description
-This reporsitory contains the Flask Api with Json Web Token Authentication to wrap up the text classification project for unisdr (UN Office of Disaster Risk Reduction). This project attempts to improve the efficiency of classifying articles on UNISDR website for Office for Disaster Risk Reduction. This project's main objective is to build a Web Prevention Tool for UNISDR.
+This reporsitory contains the Flask Api to wrap up the text classification project for unisdr (UN Office of Disaster Risk Reduction). This project attempts to improve the efficiency of classifying articles on UNISDR website for Office for Disaster Risk Reduction. This project's main objective is to build a Web Prevention Tool for UNISDR.  
 
 Currently the main focus is to allow:  
 
@@ -45,9 +45,7 @@ The following list details project dependencies:
 * (PACKAGE) mysql-connector-python 8.0.15;
 * (PACKAGE) Flask 1.0.3;
 * (PACKAGE) Flask-Cors 3.0.8;
-* (PACKAGE) Flask-JWT-Extended 3.18.2;
 * (PACKAGE) Flask-RESTful 0.3.7;
-* (PACKAGE) Flask-SQLAlchemy 2.4.0.
 
 ## Getting Started
 

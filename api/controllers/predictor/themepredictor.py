@@ -123,21 +123,7 @@ def upload_theme():
     global data_df
     data_df = ett_t.transform_data_to_dataframe(job_type, input_data, colnames)
     return "Successfully uploading hazard data"
-"""
-class UploadTheme(Resource):
-    
 
-    def post(self):
-        bytes_data = request.stream.read()
-        bytes_data = ett_t.bytes_to_str(bytes_data)
-        bytes_data = json.loads(bytes_data) 
-        global input_data
-        input_data = pd.DataFrame(bytes_data)
-        global data_df
-        data_df = ett_t.transform_data_to_dataframe(job_type, input_data, colnames)
-        print(data_df)
-        return "Successfully uploading hazard data"
-"""
 class PredictTheme(Resource):
 
 

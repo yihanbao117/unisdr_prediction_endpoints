@@ -8,6 +8,5 @@ theme/models
 theme/vector_models
 theme/dim_reductor_models
 theme/normalizar_models
-./requirement.txt
 
 __pycache__
