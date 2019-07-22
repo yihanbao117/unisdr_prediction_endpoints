@@ -48,11 +48,5 @@ db_folder = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file
 sys.path.append(db_folder)
 
 # Add a resource to the api
-#app.add_resource(hazardpredictor.UploadHazard, '/upload/hazard')
-#app.add_resource(hazardpredictor.UploadTheme, '/upload/theme')
-
 api.add_resource(hazardpredictor.PredictHazard, '/predict/hazard')
 api.add_resource(themepredictor.PredictTheme, '/predict/theme')
-
-#api.add_resource(hazardpredictor.HazardUpdate, '/h-update-labels')
-#api.add_resource(themepredictor.ThemeUpdate, '/t-update-labels')
