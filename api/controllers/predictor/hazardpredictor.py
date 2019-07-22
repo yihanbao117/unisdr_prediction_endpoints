@@ -23,7 +23,6 @@ import sklearn  # Used for applying machine learning packages
 import os  # Used for reading, writing and updating files
 import logging  # Used for saving loogings info
 import sys  # Used for integrating with system
-import mysql.connector  # Used for connecting mysql database
 sys.path.append('../ett/')  # Natigate to ett folder path
 from helper import Helper as ett_h  # ETT helper package
 from transformer import Transformer as ett_t  # ett transfer package 
@@ -39,15 +38,13 @@ sys.path.append('../classification/')  # Navigate to classification folder path
 from unisdr import TextClassification as tc  # ETT text classification methods
 from unisdr import TextModel as tm  # ETT model saving methods
 from flask_restful import Resource  # Flask restful for create endpoints
-from flask_jwt_extended import jwt_required  # Flask extension to provide the jwt 
 from flask_restful import reqparse  # Flask restful to parse user's input parameters
 from io import StringIO  # Used to convert bytes to string
 from flask import request  # Flask methods for requesting binary input file
-from run import db  # From run.py import application's database
 from run import app  # From run.py import application
 from flask import jsonify  # Flask methods used for jsonify object
 from flask import session  # Flask methods used for reading from aws
-
+import json
 # Initiate Parameter
 base_folder_location = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))))
 models = []
@@ -86,10 +83,6 @@ emp_list = [vector_models_list, dim_reductor_models_list, normalizar_models_list
 # New Text Models 
 models_object = []
 
-# MySQL connection
-hazard_db = mysql.connector.connect(host='localhost', user='root', password='password', database='unisdr_schema_db')
-hazard_cursor = hazard_db.cursor()
-
 # Load labels - list
 @app.before_first_request
 def load_hazard_labels():
@@ -116,111 +109,31 @@ def load_hazard_models():
         global models_object
         models_object.append(new_model)
 
-# Used for generting job id when user uploading files
-@app.before_first_request
-def counting():
-
-        counting.counter += 1
-counting.counter = -1  # The first job id starts with 1 
-
 @app.route('/upload-hazard', methods=['POST'])
 def upload_hazard():
     
     # Reead byte data from postman (eg:csv)
     bytes_data = request.stream.read()
-    s = ett_t.bytes_to_str(bytes_data)
-    bytes_data = StringIO(s)
-    input_data = pd.read_csv(bytes_data) 
+    bytes_data = ett_t.bytes_to_str(bytes_data)
+    bytes_data = json.loads(bytes_data) 
+    global input_data
+    input_data = pd.DataFrame(bytes_data)
+    global data_df
+    data_df = ett_t.transform_data_to_dataframe(job_type, input_data, colnames)
+    print(data_df)
+    return "Successfully uploading hazard data"
 
-    # Used for generating Job ID
-    counting()
-    num = counting.counter
-
-    # Gnenerate Job ID
-    input_data[ColumnName.JOBID.value] = num
-
-    # Insert uploaded files into MySQL database 
-    for index, row in input_data.iterrows():
-        sql = "INSERT INTO Hazard_Predictions (job_id, title, body) VALUES (%s, %s, %s)"
-        val = (row[ColumnName.JOBID.value], row[ColumnName.TITLE.value], row[ColumnName.TEXTDATA.value])
-        hazard_cursor.execute(sql, val)
-    hazard_db.commit()
-    return  "saving successfully"
-
-class FetchDataframeHazard(Resource):
+class PredictHazard(Resource):
 
 
-    # Needing a job ID to be the acceptance and extract the data and making the predictions
     def post(self):
         
-        # eceive parameters from users input
-        parser = reqparse.RequestParser()
-        parser.add_argument(ColumnName.JOBID.value, help='This field cannot be blank', required=True)
-        data = parser.parse_args()  
-        
-        # Based on job_id selected prediction_id,title and body
-        job_id = data[ColumnName.JOBID.value]
-        sql = "SELECT prediction_id, title, body FROM Hazard_Predictions WHERE Hazard_Predictions.job_id = %s"
-        val = (job_id,)
-        hazard_cursor.execute(sql, val)
-        
-        # Make prediction on data corresponding to users requested job_id
-        fet_df = hazard_cursor.fetchall()
-        fet_df = ett_h.provision_named_data_frame(fet_df, [ColumnName.PREDID.value, ColumnName.TITLE.value, ColumnName.TEXTDATA.value])
-        global prediction_id
-        prediction_id = fet_df[ColumnName.PREDID.value]
-        tit_id_df = fet_df[ColumnName.TITLE.value]
-        bod_id_df = fet_df[ColumnName.TEXTDATA.value]
-        global data_df
-        data_df = ett_t.transform_data_to_dataframe(job_type, fet_df, colnames)
-        return "successfully fetching the data"
-
-class UserPredictHazard(Resource):
-
-
-    #@jwt_required
-    def post(self):
-
         # Text classification happens here
         classification = tc(models_object, data_df, labels)
         results_df = classification.process_data()
-        results_df = ett_h.combined_df(prediction_id, results_df, 1)
+        results_json = results_df.to_json(orient='columns')
+        return results_json  # Return labels and probabilities
 
-        # Updating the MySQL database using pred_prob and pred_lab
-        hazard_cursor.execute("SET SQL_SAFE_UPDATES=0")
-        for index, row in results_df.iterrows():
-            sql = "UPDATE Hazard_Predictions SET labels = %s, probabilities = %s WHERE prediction_id = %s"
-            val = (row[ColumnName.LABELS.value], row[ColumnName.PROBABILITIES.value], row[ColumnName.PREDID.value])
-            hazard_cursor.execute(sql, val)
-        hazard_db.commit()
-        df_json = ett_t.df_to_json(results_df, OrientPara.INDEX.value)
-        return df_json
-
-class HazardDataUpdateDB(Resource):
-
-
-    def post(self):
-
-        #Receive parameters from users input
-        parser = reqparse.RequestParser()
-        parser.add_argument(ColumnName.UPDATEDLABEL.value, help='Please verifying the predicted labels', required=True)
-        parser.add_argument(ColumnName.PREDID.value, help='Please provide the prediction_id', required=True)
-        data = parser.parse_args()
-        
-        # Receive the json type data and transfer into dataframe
-        dict_updated = data[ColumnName.UPDATEDLABEL.value]
-        dict_updated = ast.literal_eval(dict_updated)
-        updated_labels = pd.DataFrame(dict_updated.values())
-        updated_labels.columns = [ColumnName.UPDATEDLABEL.value]
-        
-        # Update the actuals in mysql database
-        updated_id = data[ColumnName.PREDID.value]
-        for index, row in updated_labels.iterrows():
-            sql = "UPDATE Hazard_Predictions SET actuals = %s WHERE prediction_id = %s"
-            val = (row[ColumnName.UPDATEDLABEL.value], updated_id)
-            hazard_cursor.execute(sql, val)
-        hazard_db.commit()
-        return {"message": "The actuals has been updated in the Hazard Prediction Database"}
 
 """
 @app.before_first_request
