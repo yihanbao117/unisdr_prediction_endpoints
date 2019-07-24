@@ -215,6 +215,7 @@ class Helper:
     def combined_df(dataframe1,dataframe2, axis_para):
         combined_df = pd.concat([dataframe1,dataframe2], axis=axis_para)
         return combined_df
+        
     """
     ##
     # This function used for create parameter

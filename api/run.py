@@ -14,15 +14,15 @@ __maintainer__ = "Yihan Bao"
 __email__ = "yihan.bao@un.org"
 __status__ = "Development"
 
-import pandas as pd
-import os
-import logging
-import sys
-from flask import Flask
-from flask_restful import Api
-from flask import request
-from flask import jsonify
-from io import StringIO
+import pandas as pd  # Package used to operate dataframe
+import os  # Package used for accessing files
+import logging  # Pakcage for logging info
+import sys # Package used for saving logging info
+from flask import Flask  # Pakcage for Flask API
+from flask_restful import Api  # Pakcage for API
+from flask import request  # Package for receiving request input
+from flask import jsonify  # Package for jsonify object
+
 db_folder = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))),'ett')
 sys.path.append(db_folder)
 from transformer import Transformer as ett_t
@@ -40,12 +40,9 @@ api = Api(app)
 def index():
     return jsonify({'message' : 'UNISDR FLASK API started'})
 
-
 # After configuring all the api and app, import resources to link to endpointss
 from controllers.predictor import hazardpredictor
 from controllers.predictor import themepredictor
-db_folder = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))),'db')
-sys.path.append(db_folder)
 
 # Add a resource to the api
 api.add_resource(hazardpredictor.PredictHazard, '/predict/hazard')

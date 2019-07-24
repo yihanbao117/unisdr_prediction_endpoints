@@ -87,10 +87,3 @@ class LabelType(Enum):
 
     HAZARD = "hazard"
     THEME = "theme"
-
-# Mysql's database name
-class MySQLDB(Enum):
-
-
-    HAZARDDB = "hazard_db_v1"
-    THEMEDB = "theme_db_v1"

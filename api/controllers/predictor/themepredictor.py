@@ -31,7 +31,6 @@ from constants import RegexFilter  # ETT constants for regexfilter
 from constants import OrientPara  # ETT constants for orient parameters
 from constants import ColumnName  # ETT constants for column names
 from constants import EncodingType  # ETT constants for encoding type
-from constants import MySQLDB  # ETT constants for mysql database
 from constants import JobId  # ETT constants for job id
 from constants import LabelType  # ETT constants for label types
 sys.path.append('../classification/')  # Navigate to classification folder path
@@ -39,7 +38,6 @@ from unisdr import TextClassification as tc  # ETT text classification methods
 from unisdr import TextModel as tm  # ETT model saving methods
 from flask_restful import Resource  # Flask restful for create endpoints
 from flask_restful import reqparse  # Flask restful to parse user's input parameters
-from io import StringIO  # Used to convert bytes to string
 from flask import request  # Flask methods for requesting binary input file
 from run import app  # From run.py import application
 from flask import jsonify  # Flask methods used for jsonify object
@@ -114,7 +112,6 @@ def load_theme_models():
 @app.route('/upload-theme', methods=['POST'])
 def upload_theme():
 
-    # Reead byte data from postman (eg:csv)
     bytes_data = request.stream.read()
     bytes_data = ett_t.bytes_to_str(bytes_data)
     bytes_data = json.loads(bytes_data) 

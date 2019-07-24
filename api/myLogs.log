@@ -1,3 +1,0 @@
-2019-07-22 14:40:25,481 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
-2019-07-22 14:41:36,291 - INFO - 127.0.0.1 - - [22/Jul/2019 14:41:36] "[37mPOST /upload-theme HTTP/1.1[0m" 200 -
-2019-07-22 14:42:01,337 - INFO - 127.0.0.1 - - [22/Jul/2019 14:42:01] "[37mPOST /predict/theme HTTP/1.1[0m" 200 -
