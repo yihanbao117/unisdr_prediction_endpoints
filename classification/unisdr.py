@@ -122,7 +122,7 @@ class TextClassification:
 
             # Get the probabilities result
             probabilities_data = ett_p.perform_model_prob_predictions_mp(self.models[i].prediction_model, chunks, cores)
-            probabilities_data  = np.concatenate(probabilities_data )
+            probabilities_data  = np.concatenate(probabilities_data)
             result_label.append(labelled_data)
             
             # Get the probabilties dataframe
@@ -130,8 +130,10 @@ class TextClassification:
 
         # Get the prediction dataframe
         result_label = pd.DataFrame(result_label).T
+        
         # Format the probabilities
         result_prob = self.output_dataFrame.applymap(lambda x : "%.2f" % (100*x))
+       
         # Get the corresponding probability
         result_prob = result_label * result_prob.astype(float)
 

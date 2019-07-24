@@ -116,6 +116,15 @@ class Transformer:
         except Exception:
             logging.error("Exception occurred", exc_info=True)
     
+    ## 
+    # Method used to transform the input data to a dataframe
+    # @param input_data DataFrame the initial data loaded into the app 
+    # @returns DataFrame
+    @staticmethod
+    def transform_data_to_dataframe_basic(input_data, list_column): 
+        combined_data = ett_h.concatinate_data_columns(list_column, input_data)
+        return combined_data
+
     ##
     # Method used to transform the input data to a dataframe
     # @param input_data DataFrame the initial data loaded into the app 

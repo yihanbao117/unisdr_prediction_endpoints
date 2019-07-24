@@ -8,5 +8,7 @@ theme/models
 theme/vector_models
 theme/dim_reductor_models
 theme/normalizar_models
-
+api/Json_Format_Changed.ipynb
+api/results_df.csv
+api/.ipynb_checkpoints
 __pycache__

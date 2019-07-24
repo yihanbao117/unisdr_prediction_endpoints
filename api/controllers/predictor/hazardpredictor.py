@@ -42,13 +42,12 @@ from flask import request  # Flask methods for requesting binary input file
 from run import app  # From run.py import application
 from flask import jsonify  # Flask methods used for jsonify object
 from flask import session  # Flask methods used for reading from aws
-import json
 
 # Initiate Parameter
 base_folder_location = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))))
 models = []
 labels =  []
-job_type = ['BATCH', 'SINGLE']
+#job_type = ['BATCH', 'SINGLE']
 colnames = ['title', 'textData']
 data = pd.DataFrame()
 
@@ -91,7 +90,7 @@ def load_hazard_labels():
     labels = (ett_h.load_data_common_separated(abs_filename, RegexFilter.SINGLE_COMMA.value))
 
 # load models
-@app.before_first_request
+#@app.before_first_request
 def load_hazard_models():
 
     for label in labels:
@@ -113,13 +112,16 @@ def upload_hazard():
     
     bytes_data = request.stream.read()
     bytes_data = ett_t.bytes_to_str(bytes_data)
-    print(bytes_data)
+    
     bytes_data = json.loads(bytes_data) 
+    
     global input_data
-    input_data = pd.DataFrame(bytes_data)
+    input_data = pd.DataFrame(bytes_data) 
+    
     global data_df
-    data_df = ett_t.transform_data_to_dataframe(job_type, input_data, colnames)
-    print(data_df)
+    #data_df = ett_t.transform_data_to_dataframe(job_type, input_data, colnames)
+    data_df = ett_t.transform_data_to_dataframe_basic(input_data, colnames)
+    
     return "Successfully uploading hazard data"
 
 class PredictHazard(Resource):
@@ -130,8 +132,21 @@ class PredictHazard(Resource):
         # Text classification happens here
         classification = tc(models_object, data_df, labels)
         results_df = classification.process_data()
-        results_json = results_df.to_json(orient='columns')
-        return results_json  # Return labels and probabilities
+        results_df['record_id'] = results_df.index
+
+        result_dict = {}
+        for i in range(len(results_df)):
+            labels_list = results_df.iloc[i,0].split(",")
+            probabilities_list = results_df.iloc[i,1].split(",")
+            temp_list = []
+            for j in range(len(labels_list)):
+                temp_dict = {}
+                temp_dict['label'] = labels_list[j]
+                temp_dict['probability'] = probabilities_list[j]
+                temp_list.append(temp_dict)
+            result_dict[str(results_df.iloc[i,2])] = temp_list
+        result_json = json.dumps(result_dict)
+        return result_json # Return labels and probabilities
 
 
 """

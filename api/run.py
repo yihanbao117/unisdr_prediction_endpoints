@@ -22,7 +22,6 @@ from flask import Flask  # Pakcage for Flask API
 from flask_restful import Api  # Pakcage for API
 from flask import request  # Package for receiving request input
 from flask import jsonify  # Package for jsonify object
-
 db_folder = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))),'ett')
 sys.path.append(db_folder)
 from transformer import Transformer as ett_t

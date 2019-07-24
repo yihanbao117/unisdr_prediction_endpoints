@@ -1,7 +1,7 @@
-# UNISDR Text Classification Flask API
+# UNISDR Text Classification - Prediction Flask API
 
 ## Description
-This reporsitory contains the Flask Api to wrap up the text classification project for unisdr (UN Office of Disaster Risk Reduction). This project attempts to improve the efficiency of classifying articles on UNISDR website for Office for Disaster Risk Reduction. This project's main objective is to build a Web Prevention Tool for UNISDR.  
+This reporsitory contains the Flask Api to make text classification prediction for unisdr (UN Office of Disaster Risk Reduction). This project attempts to improve the efficiency of classifying articles on UNISDR website for Office for Disaster Risk Reduction. This project's main objective is to build a Web Prevention Tool for UNISDR.  
 
 Currently the main focus is to allow:  
 
