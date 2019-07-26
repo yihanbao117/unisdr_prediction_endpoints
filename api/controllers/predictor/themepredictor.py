@@ -150,6 +150,7 @@ class PredictTheme(Resource):
             result_dict[ett_t.to_str(results_df.iloc[i,2])] = temp_list
         result_json = json.dumps(result_dict)
         return result_json 
+        
 """
 @app.before_first_request
 def load_theme_models():

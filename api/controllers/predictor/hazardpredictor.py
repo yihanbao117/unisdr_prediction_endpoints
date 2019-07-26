@@ -132,9 +132,7 @@ class PredictHazard(Resource):
     def post(self):
         
         # Text classification happens here
-        print("Here it is1")
         classification = tc(models_object, UploadHazard.data_df, labels)
-        print("Here it is2")
         results_df = classification.process_data()
         results_df[ColumnName.RECORDID.value] = results_df.index
         result_dict = {}
