@@ -44,5 +44,7 @@ from controllers.predictor import hazardpredictor
 from controllers.predictor import themepredictor
 
 # Add a resource to the api
+api.add_resource(hazardpredictor.UploadHazard, '/upload-hazard')
+api.add_resource(themepredictor.UploadTheme, '/upload-theme')
 api.add_resource(hazardpredictor.PredictHazard, '/predict/hazard')
 api.add_resource(themepredictor.PredictTheme, '/predict/theme')

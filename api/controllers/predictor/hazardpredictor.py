@@ -90,7 +90,7 @@ def load_hazard_labels():
     labels = (ett_h.load_data_common_separated(abs_filename, RegexFilter.SINGLE_COMMA.value))
 
 # load models
-#@app.before_first_request
+@app.before_first_request
 def load_hazard_models():
 
     for label in labels:
@@ -107,19 +107,24 @@ def load_hazard_models():
         global models_object
         models_object.append(new_model)
 
-@app.route('/upload-hazard', methods=['POST'])
-def upload_hazard():
+
+class UploadHazard(Resource):
+   
     
-    bytes_data = request.stream.read()
-    bytes_data = ett_t.bytes_to_str(bytes_data)
-    bytes_data = json.loads(bytes_data) 
-    global input_data
-    input_data = pd.DataFrame(bytes_data) 
-    global data_df
-    #data_df = ett_t.transform_data_to_dataframe(job_type, input_data, colnames)
-    data_df = ett_t.transform_data_to_dataframe_basic(input_data, colnames)
-    
-    return "Successfully uploading hazard data"
+    # Global the data_df parameters
+    def __init__(self):
+        
+        UploadHazard.data_df = " "
+
+    def post(self):
+
+        bytes_data = request.stream.read()
+        bytes_data = ett_t.bytes_to_str(bytes_data)
+        bytes_data = json.loads(bytes_data)
+        
+        input_data = pd.DataFrame(bytes_data) 
+        UploadHazard.data_df = ett_t.transform_data_to_dataframe_basic(input_data, colnames)
+        return "uploading successfully!"
 
 class PredictHazard(Resource):
 
@@ -127,7 +132,9 @@ class PredictHazard(Resource):
     def post(self):
         
         # Text classification happens here
-        classification = tc(models_object, data_df, labels)
+        print("Here it is1")
+        classification = tc(models_object, UploadHazard.data_df, labels)
+        print("Here it is2")
         results_df = classification.process_data()
         results_df[ColumnName.RECORDID.value] = results_df.index
         result_dict = {}
