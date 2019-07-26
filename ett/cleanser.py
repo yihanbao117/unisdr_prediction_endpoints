@@ -36,6 +36,7 @@ class Cleanser:
     # @return DataFrame of the cleansed data
     @staticmethod
     def clean_dataframe_by_regex(dataFrame, regex):
+
         try:
             dataFrame = dataFrame.apply(lambda x: re.sub(str(regex), "", x))  
             return dataFrame
@@ -53,6 +54,7 @@ class Cleanser:
     # @see enchant.Dict() function used to construct a dictionary based on the iso code
     @staticmethod
     def remove_non_iso_words(dataFrame, iso):
+
         try:
             iso_dict = enchant.Dict(iso)
             dataFrame = dataFrame.apply(lambda x: " ".join(x for x in x.split() if iso_dict.check(x)))
@@ -70,6 +72,7 @@ class Cleanser:
     # @return DataFrame of the cleansed data
     @staticmethod
     def remove_language_stopwords(dataFrame, language):
+        
         try:
             stops = set(stopwords.words(language))
             sw_removed = dataFrame.apply(lambda x: " ".join(x for x in x.split() if x not in stops))

@@ -93,7 +93,7 @@ def load_theme_labels():
     labels = (ett_h.load_data_common_separated(abs_filename, RegexFilter.SINGLE_COMMA.value))
 
 # load models
-#@app.before_first_request
+@app.before_first_request
 def load_theme_models():
     for label in labels:
         print("Theme label: ", label)
@@ -129,21 +129,20 @@ class PredictTheme(Resource):
         # Text classification happens here
         classification = tc(models_object, data_df, labels)
         results_df = classification.process_data()
-        #results_json = results_df.to_json(orient='columns')
-        results_df['record_id'] = results_df.index
+        results_df[ColumnName.RECORDID.value] = results_df.index
         result_dict = {}
         for i in range(len(results_df)):
-            labels_list = results_df.iloc[i,0].split(",")
-            probabilities_list = results_df.iloc[i,1].split(",")
+            labels_list = results_df.iloc[i,0].split(RegexFilter.SINGLE_COMMA.value)
+            probabilities_list = results_df.iloc[i,1].split(RegexFilter.SINGLE_COMMA.value)
             temp_list = []
             for j in range(len(labels_list)):
                 temp_dict = {}
-                temp_dict['label'] = labels_list[j]
-                temp_dict['probability'] = probabilities_list[j]
+                temp_dict[ColumnName.LABEL.value] = labels_list[j]
+                temp_dict[ColumnName.PROBABILITIES.value] = probabilities_list[j]
                 temp_list.append(temp_dict)
-            result_dict[str(results_df.iloc[i,2])] = temp_list
+            result_dict[ett_t.to_str(results_df.iloc[i,2])] = temp_list
         result_json = json.dumps(result_dict)
-        return result_json # Return labels and probabilities
+        return result_json 
 """
 @app.before_first_request
 def load_theme_models():

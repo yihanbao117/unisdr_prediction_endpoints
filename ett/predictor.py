@@ -31,6 +31,7 @@ class Predictor:
     # @returns DataFrame housing 0 OR 1
     @staticmethod
     def perform_model_predictions(model, dataFrame):
+        
         try:
             return model.predict
         except Exception:
@@ -44,6 +45,7 @@ class Predictor:
     # @returns DataFrame housing 0 OR 1
     @staticmethod
     def perform_model_predictions_mp(model, dataFrame, cores):
+
         try:
             with Pool(processes=cores) as pool:
                 result = pool.map(model.predict, dataFrame)
@@ -71,6 +73,7 @@ class Predictor:
     # @returns DataFrame housing 0.0 > 1.0
     @staticmethod
     def perform_model_prob_predictions_mp(model, dataFrame, cores):
+
         try:
             with Pool(processes=cores) as pool:
                 result = pool.map(model.predict_proba, dataFrame)

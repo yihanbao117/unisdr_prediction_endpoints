@@ -90,7 +90,7 @@ def load_hazard_labels():
     labels = (ett_h.load_data_common_separated(abs_filename, RegexFilter.SINGLE_COMMA.value))
 
 # load models
-@app.before_first_request
+#@app.before_first_request
 def load_hazard_models():
 
     for label in labels:

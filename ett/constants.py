@@ -67,13 +67,14 @@ class ColumnName(Enum):
 
     TITLE = "title"
     TEXTDATA = "textData"
-    LABELS = "labels"
+    LABEL = "label"
     PROBABILITIES = "probabilities"
     JOBID = "job_id"
     TIME = "time"
     UPDATED = "updated_labels"
     PREDID = "prediction_id"
     UPDATEDLABEL = "updated_labels"
+    RECORDID = "record_id"
 
 # Encoding type
 class EncodingType(Enum):

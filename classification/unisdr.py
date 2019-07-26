@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
 """
     UNISDR Prevention Web Text Classification Solution
 
@@ -56,7 +57,7 @@ class TextModel:
 class TextClassification:
 
 
-    # Global variable declaration TODO array of models, populate these types-DONE
+    # Global variable declaration 
     models = []  # list .pickle file
     data = pd.DataFrame()  # dataframe
     labels = []  # list
@@ -228,15 +229,15 @@ class TextClassification:
     # @returns DataFrame of the cleaned data according to these rules
     def pre_process_text_cleanse(self, initial_data):
         # Removed all non alphanumeric characters
-        nan_cleaned_data = ett_c.clean_dataframe_by_regex(initial_data, RegexFilter.NON_ALPHA_NUMERIC.value) # TODO use ENUM-DONE
+        nan_cleaned_data = ett_c.clean_dataframe_by_regex(initial_data, RegexFilter.NON_ALPHA_NUMERIC.value) 
         # Removed all digits
-        d_cleaned_data = ett_c.clean_dataframe_by_regex(nan_cleaned_data, RegexFilter.DIGITS_ONLY.value) # TODO use ENUM-DONE
+        d_cleaned_data = ett_c.clean_dataframe_by_regex(nan_cleaned_data, RegexFilter.DIGITS_ONLY.value) 
         # Remove non-English text
-        l_cleaned_data = ett_c.remove_non_iso_words(d_cleaned_data, Language.ENGLISH.value)  # TODO use ENUM-DONE
+        l_cleaned_data = ett_c.remove_non_iso_words(d_cleaned_data, Language.ENGLISH.value)  
         # Remove English stop words
-        rew_cleaned_data = ett_c.remove_language_stopwords(l_cleaned_data, Language.ENGLISH.name) #  TODO use ENUM-DONE
+        rew_cleaned_data = ett_c.remove_language_stopwords(l_cleaned_data, Language.ENGLISH.name) 
         # Return the newly cleaned data
-        return rew_cleaned_data # TODO use rew_cleaned_data-DONE(change nothing?)
+        return rew_cleaned_data 
 
     ##
     # Method used to contain the various transformation procedures performed on the data

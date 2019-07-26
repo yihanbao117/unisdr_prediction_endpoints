@@ -39,6 +39,7 @@ class Transformer:
     # Here the text actually is a dataframe with text data
     @staticmethod
     def lowercase(text):
+        
         if text == pd.DataFrame:
             print("Your text data is empty, please check your input data")
         else:
@@ -53,6 +54,7 @@ class Transformer:
     # Here the text actually is a dataframe with text data
     @staticmethod
     def stemming(text):
+
         try:
             porter_stemmer = PorterStemmer()
             text = text.apply(lambda x: " ".join([porter_stemmer.stem(word) for word in x.split()]))
@@ -67,6 +69,7 @@ class Transformer:
     # Here the text actually is a dataframe with text data
     @staticmethod
     def stemming_mp(text,cores=4):   
+
         if text == pd.DataFrame:
             print("Your text data is empty, please check your input data")
         else:
@@ -82,6 +85,7 @@ class Transformer:
     # @returns String rooted text
     @staticmethod                                                   
     def lemmatization(text):
+
         text = text.apply(lambda x: " ".join([Word(word).lemmatize() for word in x.split()]))
         return text
 
@@ -93,6 +97,7 @@ class Transformer:
     # Here the text actually is a dataframe with text data
     @staticmethod
     def lemmatization_mp(text,cores=2):  
+
         if text == pd.DataFrame:
             print("Your text data is empty, please check your input data")
         else:
@@ -109,6 +114,7 @@ class Transformer:
     # @returns concat_cols DataFrame of concatinated columns imto a single column   
     @staticmethod
     def perform_model_transformation(model, dataFrame): 
+
         try:
             return model.transform(dataFrame)
         except AttributeError:
@@ -122,6 +128,7 @@ class Transformer:
     # @returns DataFrame
     @staticmethod
     def transform_data_to_dataframe_basic(input_data, list_column): 
+
         combined_data = ett_h.concatinate_data_columns(list_column, input_data)
         return combined_data
 
@@ -131,6 +138,7 @@ class Transformer:
     # @returns DataFrame
     @staticmethod
     def transform_data_to_dataframe(job_type, input_data, list_column):   
+
         # SINGLE                                                        
         if job_type == JobType.BATCH.value:                             
             dataframe_single = ett_h.string_to_dataframe(input_data, list_column)
@@ -147,6 +155,7 @@ class Transformer:
     # @returns Combined dataframe
     @staticmethod
     def combine_dataframe(list_dataframe, axis_num): 
+
         for i in list_dataframe:
              result_model = pd.concat([i for i in list_dataframe], axis = axis_num)
         return result_model
@@ -158,6 +167,7 @@ class Transformer:
     # @returens Transfered json file
     @staticmethod
     def df_to_json(dataframe, orient_para):
+
         json = dataframe.to_json(orient=orient_para)
         return json
     
@@ -167,6 +177,7 @@ class Transformer:
     # @returns String type of data
     @staticmethod
     def to_str(data):
+
         data = str(data)
         return data
 
@@ -176,5 +187,6 @@ class Transformer:
     # @returns String type of data
     @staticmethod
     def bytes_to_str(data):
+
         data = str(data, "utf-8")
         return data
