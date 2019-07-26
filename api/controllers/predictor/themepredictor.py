@@ -93,7 +93,7 @@ def load_theme_labels():
     labels = (ett_h.load_data_common_separated(abs_filename, RegexFilter.SINGLE_COMMA.value))
 
 # load models
-@app.before_first_request
+#@app.before_first_request
 def load_theme_models():
     for label in labels:
         print("Theme label: ", label)
