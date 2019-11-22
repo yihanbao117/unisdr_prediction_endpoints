@@ -131,7 +131,7 @@ class UploadTheme(Resource):
 class PredictTheme(Resource):
 
 
-    def post(self):
+    def get(self):
         
         # Text classification happens here
         classification = tc(models_object, UploadTheme.data_df, labels)

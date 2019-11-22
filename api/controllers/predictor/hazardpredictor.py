@@ -128,8 +128,8 @@ class UploadHazard(Resource):
 
 class PredictHazard(Resource):
 
-
-    def post(self):
+    def get(self):
+    ###yihan def post(self):
         
         # Text classification happens here
         classification = tc(models_object, UploadHazard.data_df, labels)

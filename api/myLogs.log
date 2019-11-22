@@ -1,3 +1,7 @@
-2019-07-26 13:49:47,027 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
-2019-07-26 13:50:30,845 - INFO - 127.0.0.1 - - [26/Jul/2019 13:50:30] "[37mPOST /upload-theme HTTP/1.1[0m" 200 -
-2019-07-26 13:50:57,696 - INFO - 127.0.0.1 - - [26/Jul/2019 13:50:57] "[37mPOST /predict/theme HTTP/1.1[0m" 200 -
+2019-11-18 13:37:55,531 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2019-11-18 13:38:58,495 - INFO - 127.0.0.1 - - [18/Nov/2019 13:38:58] "[37mPOST /upload/hazard HTTP/1.1[0m" 200 -
+2019-11-18 13:39:38,700 - INFO - 127.0.0.1 - - [18/Nov/2019 13:39:38] "[37mGET /predict/hazard HTTP/1.1[0m" 200 -
+2019-11-18 13:39:48,481 - INFO - 127.0.0.1 - - [18/Nov/2019 13:39:48] "[37mPOST /upload/hazard HTTP/1.1[0m" 200 -
+2019-11-18 13:39:54,335 - INFO - 127.0.0.1 - - [18/Nov/2019 13:39:54] "[37mGET /predict/hazard HTTP/1.1[0m" 200 -
+2019-11-18 14:21:40,604 - INFO - 127.0.0.1 - - [18/Nov/2019 14:21:40] "[37mPOST /upload/hazard HTTP/1.1[0m" 200 -
+2019-11-18 14:22:06,600 - INFO - 127.0.0.1 - - [18/Nov/2019 14:22:06] "[37mGET /predict/hazard HTTP/1.1[0m" 200 -
